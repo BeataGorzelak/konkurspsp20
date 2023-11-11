@@ -1,1 +1,0 @@
-# konkurspsp20
