@@ -1217,174 +1217,168 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
   });
 
-// Funkcja do dodawania punktu
-document.addEventListener('DOMContentLoaded', function () {
-	var baseUrl = 'https://capslo-001-site1.atempurl.com'; // Zmień na swoje potrzeby
-	var pageLoader = document.getElementById('page-loader');
-	var cardsWrapper = document.getElementById('allCardsWrapper');
-  
-	// Funkcja do pokazywania i ukrywania loadera
-	function toggleLoader(showLoader) {
-	  pageLoader.style.display = showLoader ? 'block' : 'none';
-	}
-  
-	// Funkcja do uzyskiwania unikalnego identyfikatora użytkownika
-	function getUserId() {
-	  var userId = localStorage.getItem('user_id');
-	  if (!userId) {
-		userId = 'user_' + Math.random().toString(36).substring(7);
-		localStorage.setItem('user_id', userId);
-	  }
-	  return userId;
-	}
-  
-	// Funkcja do oznaczania użytkownika jako oddającego głos
-	function markUserAsVoted(userId) {
-	  localStorage.setItem(`user_vote_${userId}`, 'true');
-	}
-  
-	// Funkcja do sprawdzania, czy użytkownik oddał już głos
-	function hasUserAlreadyVoted(userId) {
-	  const hasVoted = localStorage.getItem(`user_vote_${userId}`);
-	  return hasVoted === 'true';
-	}
-  
-	// Funkcja do dodawania punktu
-	function addPoint(imageId, currentPoints) {
-	  const userId = getUserId();
-	  const hasUserVoted = hasUserAlreadyVoted(userId);
-  
-	  if (!hasUserVoted) {
-		var updatedPoints = currentPoints + 1;
-  
-		// Sprawdź, czy użytkownik oddał już głos
-		fetch(`${baseUrl}/Point/${imageId}/AddPoint`, {
-		  method: 'POST',
-		  headers: {
-			'Content-Type': 'application/json',
-			'Accept': 'application/json',
-		  },
-		  body: JSON.stringify({
-			points: updatedPoints,
-			userId: userId,
-		  }),
-		})
-		.then(function (response) {
-		  if (!response.ok) {
-			showMessage();
-			throw new Error('Błąd podczas dodawania punktu');
-		  }
-  
-		  console.log('Punkt został pomyślnie dodany');
-  
-		  markUserAsVoted(userId);
-  
-		  getAllCards();
-		})
-		.catch(function (error) {
-		  console.error('Błąd:', error.message);
-		});
-	  } else {
-		showMessage();
-	  }
-	}
-  
-	// Funkcja do pobierania wszystkich kart
-	function getAllCards() {
-	  toggleLoader(true);
-  
-	  var allCardsWrapper = document.getElementById('allCardsWrapper');
-	  allCardsWrapper.innerHTML = '<p class="text-center">Ładowanie kart świątecznych...</p>';
-  
-	  fetch(`${baseUrl}/Photo/GetAllImagesWithPoints`, {
-		method: 'GET',
-		headers: {
-		  'accept': '*/*'
-		}
-	  })
-	  .then(function (response) {
-		if (!response.ok) {
-		  throw new Error('Błąd podczas pobierania danych');
-		}
-		return response.json();
-	  })
-	  .then(function (data) {
-		allCardsWrapper.innerHTML = '';
-  
-		data.forEach(function (card) {
-			var cardDiv = document.createElement('div');
-			cardDiv.className = 'col-md-4 col-xl-3';
-			cardDiv.id = card.imageId;
-		
-			var cardLink = document.createElement('a');
-			cardLink.className = 'thumb-modern';
-			cardLink.setAttribute('data-lightgallery', 'item');
-			cardLink.href = 'data:image/jpeg;base64,' + card.imageData;
-		
-			var figure = document.createElement('figure');
-		
-			var img = document.createElement('img');
-			img.src = 'data:image/jpeg;base64,' + card.imageData;
-			img.alt = '';
-			img.width = 472;
-			img.height = 355;
-		
-			var caption = document.createElement('p');
-			caption.textContent = card.imageName.replace(/\.[^/.]+$/, ''); // Usunięcie rozszerzenia pliku
-		
-			caption.style.margin = '0'; // Dodanie stylu margin: 0
-		
-			var overlay = document.createElement('div');
-			// overlay.className = 'thumb-modern__overlay';
-		
-			var rateDiv = document.createElement('div');
-			rateDiv.className = 'rate';
-		
-			var rateNumber = document.createElement('div');
-			rateNumber.className = 'rate_number';
-			rateNumber.textContent = card.points;
-		
-			var rateThumb = document.createElement('div');
-			rateThumb.className = 'rate_thumb';
-		
-			rateThumb.addEventListener('click', function () {
-				if (!rateThumb.classList.contains('voted')) {
-					addPoint(card.imageId, card.points);
-					rateThumb.classList.add('voted');
-				}
-			});
-		
-			var thumbsUpIcon = document.createElement('i');
-			thumbsUpIcon.className = 'fa fa-thumbs-up';
-			thumbsUpIcon.setAttribute('aria-hidden', 'true');
-		
-			rateThumb.appendChild(thumbsUpIcon);
-		
-			rateDiv.appendChild(rateNumber);
-			rateDiv.appendChild(rateThumb);
-		
-			figure.appendChild(img);
-			cardLink.appendChild(figure);
-			cardLink.appendChild(overlay);
-		
-			cardDiv.appendChild(cardLink);
-			cardDiv.appendChild(caption);
-			cardDiv.appendChild(rateDiv);
-		
-			allCardsWrapper.appendChild(cardDiv);
-		});
-		
-  
-		toggleLoader(false);
-	  })
-	  .catch(function (error) {
-		console.error('Błąd:', error.message);
-		toggleLoader(false);
-	  });
-	}
-  
-	getAllCards();
+  document.addEventListener('DOMContentLoaded', function () {
+    var baseUrl = 'https://capslo-001-site1.atempurl.com';
+    var pageLoader = document.getElementById('page-loader');
+
+    function toggleLoader(showLoader) {
+        pageLoader.style.display = showLoader ? 'block' : 'none';
+    }
+
+    function getUserId() {
+        var userId = localStorage.getItem('user_id');
+        if (!userId) {
+            userId = 'user_' + Math.random().toString(36).substring(7);
+            localStorage.setItem('user_id', userId);
+        }
+        return userId;
+    }
+
+    function markUserAsVoted(userId) {
+        localStorage.setItem(`user_vote_${userId}`, 'true');
+    }
+
+    function hasUserAlreadyVoted(userId) {
+        const hasVoted = localStorage.getItem(`user_vote_${userId}`);
+        return hasVoted === 'true';
+    }
+
+    function addPoint(imageId, currentPoints) {
+        const userId = getUserId();
+        const hasUserVoted = hasUserAlreadyVoted(userId);
+
+        if (!hasUserVoted) {
+            var updatedPoints = currentPoints + 1;
+
+            fetch(`${baseUrl}/Point/${imageId}/AddPoint`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    points: updatedPoints,
+                    userId: userId,
+                }),
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        showMessage();
+                        throw new Error('Błąd podczas dodawania punktu');
+                    }
+
+                    console.log('Punkt został pomyślnie dodany');
+
+                    markUserAsVoted(userId);
+
+                    getAllCards();
+                })
+                .catch(function (error) {
+                    console.error('Błąd:', error.message);
+                });
+        } else {
+            showMessage();
+        }
+    }
+
+    function getAllCards() {
+        toggleLoader(true);
+
+        var allCardsWrapper = document.getElementById('allCardsWrapper');
+        allCardsWrapper.innerHTML = '<p class="text-center">Ładowanie kart świątecznych...</p>';
+
+        fetch(`${baseUrl}/Photo/GetAllImagesWithPoints`, {
+            method: 'GET',
+            headers: {
+                'accept': '*/*'
+            }
+        })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Błąd podczas pobierania danych');
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                displayCards(data, allCardsWrapper);
+                toggleLoader(false);
+            })
+            .catch(function (error) {
+                console.error('Błąd:', error.message);
+                toggleLoader(false);
+            });
+    }
+
+    function displayCards(data, allCardsWrapper) {
+        allCardsWrapper.innerHTML = '';
+
+        data.forEach(function (card) {
+            var cardDiv = document.createElement('div');
+            cardDiv.className = 'col-md-4 col-xl-3';
+            cardDiv.id = card.imageId;
+
+            var cardLink = document.createElement('a');
+            cardLink.className = 'thumb-modern';
+            cardLink.setAttribute('data-lightgallery', 'item');
+            cardLink.href = 'data:image/jpeg;base64,' + card.imageData;
+
+            var figure = document.createElement('figure');
+
+            var img = document.createElement('img');
+            img.src = 'data:image/jpeg;base64,' + card.imageData;
+            img.alt = '';
+            img.width = 472;
+            img.height = 355;
+
+            var caption = document.createElement('p');
+            caption.textContent = card.imageName.replace(/\.[^/.]+$/, '');
+
+            caption.style.margin = '0';
+
+            var overlay = document.createElement('div');
+			overlay.className = 'thumb-modern__overlay';
+
+            var rateDiv = document.createElement('div');
+            rateDiv.className = 'rate';
+
+            var rateNumber = document.createElement('div');
+            rateNumber.className = 'rate_number';
+            rateNumber.textContent = card.points;
+
+            var rateThumb = document.createElement('div');
+            rateThumb.className = 'rate_thumb';
+
+            rateThumb.addEventListener('click', function () {
+                if (!rateThumb.classList.contains('voted')) {
+                    addPoint(card.imageId, card.points);
+                    rateThumb.classList.add('voted');
+                }
+            });
+
+            var thumbsUpIcon = document.createElement('i');
+            thumbsUpIcon.className = 'fa fa-thumbs-up';
+            thumbsUpIcon.setAttribute('aria-hidden', 'true');
+
+            rateThumb.appendChild(thumbsUpIcon);
+
+            rateDiv.appendChild(rateNumber);
+            rateDiv.appendChild(rateThumb);
+
+            figure.appendChild(img);
+            cardLink.appendChild(figure);
+            cardLink.appendChild(overlay);
+
+            cardDiv.appendChild(cardLink);
+            cardDiv.appendChild(caption);
+            cardDiv.appendChild(rateDiv);
+
+            allCardsWrapper.appendChild(cardDiv);
+        });
+    }
+
+    getAllCards();
 });
+
 
 // fetch('https://capslo-001-site1.atempurl.com/Photo/GetAllImagesWithPoints', {
 //   method: 'GET',
