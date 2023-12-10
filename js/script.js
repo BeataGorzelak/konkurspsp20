@@ -1232,6 +1232,9 @@
 			  return response.json();
 			})
 			.then(function (data) {
+			data.sort(function (a, b) {
+				return b.points - a.points; // Sortowanie malejąco
+			  });
 			  allCardsWrapper.innerHTML = '';
 	  
 			  data.forEach(function (card) {
@@ -1284,7 +1287,7 @@
 				rateThumb.appendChild(thumbsUpIcon);
 	  
 				rateDiv.appendChild(rateNumber);
-				rateDiv.appendChild(rateThumb);
+				//rateDiv.appendChild(rateThumb);
 	  
 				figure.appendChild(img);
 				cardLink.appendChild(figure);
