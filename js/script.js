@@ -1094,7 +1094,7 @@
 	// Wysyłanie nowej karty
 	
 	// Aktualizacja URL serwera
-	const baseUrl = 'https://capslo-001-site1.atempurl.com';
+	const baseUrl = 'https://photocontest.tryasp.net';
 	
 	document.addEventListener('DOMContentLoaded', function () {
 		const form = document.getElementById('sendNewCard');
@@ -1141,7 +1141,7 @@
 	
 	// Funkcja do dodawania punktu
 	document.addEventListener('DOMContentLoaded', function () {
-		var baseUrl = 'https://capslo-001-site1.atempurl.com'; // Zmień na swoje potrzeby
+		var baseUrl = 'https://photocontest.tryasp.net'; // Zmień na swoje potrzeby
 		var pageLoader = document.getElementById('page-loader');
 		var cardsWrapper = document.getElementById('allCardsWrapper');
 	  
@@ -1232,7 +1232,7 @@
 			  return response.json();
 			})
 			.then(function (data) {
-			data.sort(function (a, b) {
+			  data.sort(function (a, b) {
 				return b.points - a.points; // Sortowanie malejąco
 			  });
 			  allCardsWrapper.innerHTML = '';
@@ -1245,12 +1245,12 @@
 				var cardLink = document.createElement('a');
 				cardLink.className = 'thumb-modern';
 				cardLink.setAttribute('data-lightgallery', 'item');
-				cardLink.href = `https://capslo-001-site1.atempurl.com/images/${card.fileName}`;
+				cardLink.href = `https://photocontest.tryasp.net/images/${card.fileName}`;
 	  
 				var figure = document.createElement('figure');
 	  
 				var img = document.createElement('img');
-				img.src = `https://capslo-001-site1.atempurl.com/images/${card.fileName}`;
+				img.src = `https://photocontest.tryasp.net/images/${card.fileName}`;
 				img.alt = '';
 				img.width = 472;
 				img.height = 355;
@@ -1287,7 +1287,7 @@
 				rateThumb.appendChild(thumbsUpIcon);
 	  
 				rateDiv.appendChild(rateNumber);
-				//rateDiv.appendChild(rateThumb);
+				rateDiv.appendChild(rateThumb);
 	  
 				figure.appendChild(img);
 				cardLink.appendChild(figure);
