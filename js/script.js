@@ -1287,7 +1287,7 @@
 				rateThumb.appendChild(thumbsUpIcon);
 	  
 				rateDiv.appendChild(rateNumber);
-				rateDiv.appendChild(rateThumb);
+				//rateDiv.appendChild(rateThumb);
 	  
 				figure.appendChild(img);
 				cardLink.appendChild(figure);
